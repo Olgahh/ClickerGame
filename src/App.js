@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import UpgradeStore from "./UpgradeStore";
+class App extends Component {
+  state = {
+    perClick: 1,
+    currency: 0
+  };
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  getIncrement = () => {
+    const oldCurrency = this.state.currency;
+    const perClick = this.state.perClick;
+    this.setState({ currency: oldCurrency + perClick });
+  };
+
+  purchasedUpgrade = (cost, multiplier) => {
+    const oldCurrency = this.state.currency;
+    const oldPerClick = this.state.perClick;
+    this.setState({
+      currency: oldCurrency - cost,
+      perClick: oldPerClick * multiplier
+    });
+  };
+
+  render() {
+    return (
+      <div className="App container-fluid bg-dark">
+        <div className="container  my-5">
+          <div class="d-flex flex-column bd-highlight mb-3 justify-content-center ">
+            <h1
+              className="display-1"
+              style={{ backgroundColor: "blue", color: "white" }}
+            >
+              {this.state.currency}
+            </h1>
+            <button
+              className="btn btn-warning btn-block btn-rounded mb-2"
+              onClick={this.getIncrement}
+              style={{ color: "white" }}
+            >
+              Add {this.state.perClick}
+            </button>
+            <UpgradeStore
+              currency={this.state.currency}
+              purchasedUpgrade={this.purchasedUpgrade}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
+
+// view-source:https://orteil.dashnet.org/cookieclicker/
